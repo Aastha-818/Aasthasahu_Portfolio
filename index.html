@@ -631,7 +631,7 @@ a.u:hover{border-color:var(--ink)}
 /* entrance: a staggered rise, not a fan swing. Hover zeroes the delay so the lift is instant. */
 .fan:not(.is-in) .scard{opacity:0;transform:translateY(38px) scale(.975)}
 .scard:nth-child(2){transition-delay:.07s}.scard:nth-child(3){transition-delay:.14s}.scard:nth-child(4){transition-delay:.05s}.scard:nth-child(5){transition-delay:.12s}.scard:nth-child(6){transition-delay:.19s}
-.scard:hover{transition-delay:0s;transform:translateY(-6px);border-color:var(--ac);box-shadow:0 34px 64px rgba(74,54,38,.20)}
+.scard:hover{transition-delay:0s;transform:translateY(-6px);box-shadow:0 34px 64px rgba(74,54,38,.20)}
 /* the six accents — warm, distinct, all at home on cream */
 .scard[data-viz="ui"]{--ac:#24406b;--ac-soft:#e4eaf6;--n1:rgba(36,64,107,.13);--n2:rgba(36,64,107,.22)}
 .scard[data-viz="product"]{--ac:#7c3d6b;--ac-soft:#f5e6f1;--n1:rgba(124,61,107,.13);--n2:rgba(124,61,107,.22)}
@@ -647,7 +647,7 @@ a.u:hover{border-color:var(--ink)}
 .scard:hover h3 .carrow{opacity:1;transform:translateX(6px)}
 .scard p{font-size:15px;line-height:1.5;color:rgba(50,36,24,.72);margin-top:8px;max-width:30ch}
 .scard .vz{position:relative;height:170px;margin:22px 0 18px;border-radius:16px;background:var(--ac-soft);overflow:hidden;color:var(--ac);box-shadow:inset 0 0 0 1px rgba(74,54,38,.07);transition:transform .6s var(--ease),box-shadow .6s var(--ease)}
-.scard:hover .vz{transform:scale(1.025);box-shadow:inset 0 0 0 1px rgba(74,54,38,.16)}
+.scard:hover .vz{transform:scale(1.025)}
 .scard .vz *{animation-play-state:paused}
 .fan.is-in .scard .vz *{animation-play-state:running}
 /* UI — an interface operating itself */
@@ -938,6 +938,94 @@ body.loading{overflow:hidden}
   .h-line{font-size:clamp(44px,15vw,64px)}
   .recorder{bottom:12%}
 }
+
+/* ==========================================================================
+   RESPONSIVE — TABLET & MOBILE
+   Everything below lives inside a media query, so the desktop layout above is
+   byte-for-byte unchanged. Rules are grouped by what they fix, widest first.
+   ========================================================================== */
+
+/* --- gutters ---------------------------------------------------------------
+   .edu.band-light{padding:40px 0} zeroes the horizontal padding .wrap gives
+   every other band, so the year / score columns run into the screen edge and
+   the CGPA figure is clipped. Hand the page gutter back below --max. */
+@media (max-width:1180px){
+  .edu.band-light{padding-left:var(--pad);padding-right:var(--pad)}
+}
+
+/* --- tablet: two columns, not the phone's single stack ---------------------
+   601–900px is iPad-portrait territory. The ≤900 block below collapses the
+   grids to one column, which leaves a tablet showing one enormous card at a
+   time; put the pairs back side by side. */
+@media (min-width:601px) and (max-width:900px){
+  .fan{grid-template-columns:repeat(2,minmax(0,1fr));max-width:none;gap:20px;margin-top:44px}
+  .scard{padding:22px}
+  .scard .vz{height:180px}
+  .tiles-row{flex-direction:row;gap:16px}
+  .project-tile,.project-tile.tile-wide,.project-tile.tile-narrow{width:auto;flex:1 1 0;height:auto;aspect-ratio:3/4;border-radius:20px}
+  .project-tiles{gap:16px}
+  .principles,.achv,.facts,.also{grid-template-columns:1fr 1fr}
+  .cs-outcome-points{grid-template-columns:1fr 1fr}
+  .polaroids{height:380px}
+  .pol{width:200px}
+  .about-intro .grid,.philosophy .grid,.two{gap:36px}
+  .intro-copy{font-size:26px;max-width:640px}
+  .featured-heading{font-size:34px}
+  .ft-inner{padding:120px 24px 320px}
+}
+
+/* --- hero: keep the headline on screen ------------------------------------
+   .hero-eyebrow and .h-line.lead-line are positioned as calc(50% - 459px),
+   which goes negative below ~918px — at 390px the line starts at -264px and
+   "Designer" is simply off the left edge. Pin both to the gutter instead. */
+@media (max-width:900px){
+  .hero-eyebrow{left:var(--pad);right:var(--pad)}
+  .h-line.lead-line{left:var(--pad);right:auto}
+  /* the footer wave is a fixed 1440px-wide ribbon, so a phone or tablet sees a
+     thin off-centre slice of it with almost no solid base — the credit and the
+     social links ended up half on the cream. Fit the whole curve to the screen
+     (the svg is preserveAspectRatio="none", so it stretches cleanly). */
+  .ft-land{width:100%;height:clamp(130px,20vw,190px)}
+}
+
+/* --- phones ---------------------------------------------------------------- */
+@media (max-width:600px){
+  /* the headline has to clear the gutter on both sides at nowrap */
+  .h-line{font-size:clamp(36px,13vw,58px);letter-spacing:.5px}
+  .h-line.roll-line{top:calc(27% + 1.2em)}
+  .hero-eyebrow{font-size:11px;letter-spacing:1px}
+  /* tiles read better a little taller than 4/3 on a narrow screen */
+  .project-tile,.project-tile.tile-wide,.project-tile.tile-narrow{aspect-ratio:5/4}
+  /* the credit and the social links overlapped, and both sat half off the
+     dark strip at the very bottom (that strip is only ~60px tall) */
+  .ft-credit{left:14px;right:auto;bottom:9px;max-width:54%;white-space:nowrap;font-size:10px;line-height:1.3;letter-spacing:0}
+  .ft-social{left:auto;right:14px;bottom:9px;gap:11px}
+  .ft-social a{font-size:11px;padding:0}
+  .ft-inner{padding:110px 20px 260px;gap:28px}
+  /* comfortable touch targets */
+  .nav-burger,.nav-wave{width:38px;height:38px}
+  .chips a,.chips span,.bl-row{min-height:44px}
+}
+
+@media (max-width:430px){
+  /* on /work and case studies the Back link and the availability pill fight
+     for the same 60px; drop the pill's label and keep the avatar */
+  body[data-page="work"] .nav-pill .avail-tag,
+  body[data-page="case"] .nav-pill .avail-tag{max-width:0;opacity:0;margin-left:0}
+  .nav-back{font-size:15px;gap:6px}
+  .edu-what h3{font-size:21px}
+  .edu-score b{font-size:26px}
+  .cs-live,.ghost-btn{width:100%;justify-content:center}
+}
+
+/* --- touch devices ---------------------------------------------------------
+   hover states can stick on a tap, and the custom cursor has nothing to
+   follow, so neither should run where there is no mouse. */
+@media (hover:none){
+  .ft-cursor,.ft-tip{display:none!important}
+  .scard:hover{transform:none;box-shadow:0 18px 44px rgba(74,54,38,.10)}
+  .edu-list li:hover::after{width:0}
+}
 /* ---------- reduced motion ---------- */
 @media (prefers-reduced-motion:reduce){
   html{scroll-behavior:auto}
@@ -968,7 +1056,7 @@ window.SITE = {
   resume: "https://drive.google.com/file/d/1hfUDQ2eFgtPcTQdrT1VCk4eHQ1LLKXxU/view?usp=sharing",
   cameven: "https://cameven-site.vercel.app/",
   /* personal design-projects site — paste the URL and the About button appears; leave "" to hide it */
-  portfolio: "https://aasthasahu-protfolio.framer.website/",
+  portfolio: "",
   available: true,
   /* Nav avatar: the photo from the CV is embedded below; replace with "assets/img/about/avatar.jpg" (a square crop) for a sharper one. */
   avatar: "data:image/jpeg;base64,/9j/2wBDAA0JCgsKCA0LCgsODg0PEyAVExISEyccHhcgLikxMC4pLSwzOko+MzZGNywtQFdBRkxOUlNSMj5aYVpQYEpRUk//2wBDAQ4ODhMREyYVFSZPNS01T09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT0//wAARCAB3AHcDASIAAhEBAxEB/8QAHwAAAQUBAQEBAQEAAAAAAAAAAAECAwQFBgcICQoL/8QAtRAAAgEDAwIEAwUFBAQAAAF9AQIDAAQRBRIhMUEGE1FhByJxFDKBkaEII0KxwRVS0fAkM2JyggkKFhcYGRolJicoKSo0NTY3ODk6Q0RFRkdISUpTVFVWV1hZWmNkZWZnaGlqc3R1dnd4eXqDhIWGh4iJipKTlJWWl5iZmqKjpKWmp6ipqrKztLW2t7i5usLDxMXGx8jJytLT1NXW19jZ2uHi4+Tl5ufo6erx8vP09fb3+Pn6/8QAHwEAAwEBAQEBAQEBAQAAAAAAAAECAwQFBgcICQoL/8QAtREAAgECBAQDBAcFBAQAAQJ3AAECAxEEBSExBhJBUQdhcRMiMoEIFEKRobHBCSMzUvAVYnLRChYkNOEl8RcYGRomJygpKjU2Nzg5OkNERUZHSElKU1RVVldYWVpjZGVmZ2hpanN0dXZ3eHl6goOEhYaHiImKkpOUlZaXmJmaoqOkpaanqKmqsrO0tba3uLm6wsPExcbHyMnK0tPU1dbX2Nna4uPk5ebn6Onq8vP09fb3+Pn6/9oADAMBAAIRAxEAPwDzCiiigAooooAKKKUAkgAZJ6CgBKXBPQVdSxaNlNwCO+2rCP8AMI4lxg8YHU07MVzKwfSkro3tZWhDqMPt3bSOo9qpS6fHcN+4+WQ/w4xzQ4sE0ZNFPljaKQo4wwplIYUUUUAFFFFABRRRQAUUUUAFaejwBpGncZCghfrisytq1/c28QA5yD9TTXcTN620+e7QOojzjGX+lS/8I8xZmfYrHOCvatfSoNkK+aDuPJrRk2Gp9q2aKilucZcR31q2Jk8xc4Dj0qqI0MoYllLNyQO+Ov6V0mpfuwGKllB5x2FYV/cIUQIoAXOf8/560QquTFOko7GZqMP2tXk24lXv/erDrfDrIoctzWTfw+TcsB91vmFXIzRWoooqSgooooAKKKKACiiigB8a7nAPQcmtHT3eW9hVAC4bIDHjI55/KqVuuVc/QVu+EoYpNaAYZIRsH3//AFZpN2Q4q7Rsw+JpLWeOG7SGRDwZI8j+fWti+1mC2thOyGQN90L1NQ3WgRShTMsTQx7iByCM9Rwam1DTrWazigdQFCgcHFZO3Q6EmYR8SSXUoSGzhXP/AD0lqO8tyYpJ0TYMZaM4OPoa0D4ZVZEaGFFQJsLCUjcPUjHWpp7VLWwMZ9MYzmk2k9BJNrU4Sa4YAKvUd/SlvT51hDM33gxUn1/zinamALlhGoEYbCEdCKYqGSydB2+YfhW97nO1ZlCiiigAooooAKKKKACiilAyQKALSDZbD+8x3fhWhoc/2LUbe5J437W+h4qm42tzjA4pCxCgDjina6BOzuemyM0gZzKisi/Jv+6D6ms24ur+SQo7WaRlcAmQHPHBHpUej3K6rYRyEKZR8pyAcMOv+fepRY3Es21reOKMdXCrz9K5rJbnYmmrlkXbwxbEcSLjnBzis3V73yrKS4cbgoGFz1NWLlYogEQhQOuOlcz4kumdIYRxHkn6n/JqUuaVhTdo3M68lFxslUbRjAXOafa7Q2Ox4/CqkeCwBJxU6nYwxXWtEcl9ShIu2Rl9CRTamu123L+5yPxqGkAUUUUAFFFFABSjlgBSVraJoeparcA2VnLKq8lsYX8zxQBG8ZL8DPNMkXc+ByemB3rv9P8Ah7cEeZql4kaYy0cHLf8AfR4H5GtHTvC+n6dIZoYmeU9HkO4r9OKJOyCKuY2gaTPB4fCNmG6ZzKuex4AB/AVVkvbzzCkkpBzhh0xXYyJs7cVh6zYJOTcRAeavUf3h/jXJJts646aGbIoMYJOSawPEi4+zkdOf6Vteb5hVeyVBf2yX1vsPUdDSg7SuwmrqxySnkVbPoOpAIqWbR7+3If7NKyZwGCGkeGRCY5EaOWIkMjDBHqMV2p3ORqxHqUQaOOdcngK2azq1ivmWcqdwuQKyaQBRRRQAUUV0PgjRhrPiKGOVc28H72XPQgdB+Jx+tAHZeBfBNvDaRanq8Cy3Eo3xQyDKxr2JHc/yr0AKAQoGAB2pAwApQf3h+g/rTJFaNHXawyKyWC7j5b8Z4zWufmUqc8jHBxVS5giRFKjHbFTJXLg7FGWIOuGH4iss2pldsH5VOCa1nBzjPFRCNUzjuc4rJxubJ2Mi60O2mdm2sjHqY+M0y00aCybeFkkkP8T44+grcACrgUw27zNhASaORBzDbS0ZnSRogyAnk4/OnaloGn6rGReW67/4Zk4dT9f8a0YEMVsokXaUGDzUqf6vcw684roguVHNN3Z5jqfgnUrJpZrUrdQLyNvEmPdf8K4KZPLmdPQ19FdMn2rzP4j+HEjP9tWKYViBcoB0J6N/Q/hQ0CZ59RRRUlBXrPwx04WmgSX7L+8vJOD/ALC8D9d1eTqpZgqjJJwBXv8AploNP0u0sl6QQqh9yByfzzVRJkXQeRTo23OT6gf1qInHNJbyZcr6ZqmiS3nmkZVfG4Zx600H5qcTU2KKc8OZtsS9skelV5IyjYcYNaR5o2KWDMASvQ+lJxKU2Z6QNI+0/KBzyKs28Zj3AkHJzmpXxvJ79KRT1pqNhSk2R3J+VV/vMB+tPlfAVe7Gq142JIB6yf0NOds3ignhI936/wD1qoge7Y4qleW8d3bS2sw3RTKVYexGKmRy67z0Y5FIw5pgeCXdu9pdzW0n34XZG+oOKK2/Hdr9m8VXWBhZgso/Ec/qDRWRoQeDrIX/AIq0+BgCol8xge4Ubv6V7i/36KKqJMhjnAz2qGKNzcFkbgDpRRVkl1T60uaKKQAKViccdKKKQyMmhTRRTEUdRcKYGPQTL/h/Wq7Tm4vpYIzgnCE+igAk/qPzoopdQLYIx8owo4FA54ooqhHnHxRtwt5YXIHLo0Z/4CQR/wChGiiis3uaLY//2Q==",
@@ -985,15 +1073,52 @@ window.SITE = {
   /* Story lines under the hero (each string = one revealed line) */
   intro1: ["Three years across product, brand and the web from an exam-prep, app 1 lakh+ students study on, to an AI whiteboard tool 1 lakh+ people, make videos with, to brand systems carried from the logo to the pitch deck."],
   intro2: ["I trained as an engineer, so I read the system before I draw the screen, and I hand engineers something they don't have to re-interpret."],
-  /* ---- CONTACT FORM (real email) ----
-     1. Create a free EmailJS account → https://www.emailjs.com  (200 emails/month free)
-     2. Add an email service (Gmail) → copy its Service ID
-     3. Create TWO templates and copy their Template IDs:
-        · "owner"  — To: your inbox.          Subject: New message from {{from_name}}   Body: {{message}} / reply to {{reply_to}}
-        · "reply"  — To: {{to_email}}          Subject: Thanks {{to_name}} — I got your message   Body: a short thank-you (see docs)
-     4. Account → API keys → copy the Public Key. Paste all four below.
-     Leave blank = the form falls back to Web3Forms (if a key is set) and then to an email draft. */
-  emailjs: { publicKey: "", serviceId: "", templateOwner: "", templateReply: "" },
+  /* =====================================================================
+     CONTACT FORM — REAL EMAIL (EmailJS, free for 200 emails/month)
+     Every submission sends TWO emails: one to the inbox in `email:` above,
+     and an automatic confirmation to whoever filled the form.
+     Fill the four values below and it is live — nothing else to change.
+
+     1. Sign up at https://www.emailjs.com and verify your address.
+     2. Email Services → Add New Service → Gmail → connect sahuaastha818@gmail.com.
+        Copy the Service ID (looks like service_ab12cde)      → serviceId
+     3. Email Templates → Create New Template, TWICE.
+
+        TEMPLATE 1 — the one that reaches you.
+          To email .... sahuaastha818@gmail.com
+          From name ... {{from_name}}
+          Reply To .... {{reply_to}}          ← so Reply goes straight to them
+          Subject ..... New project enquiry from {{from_name}}
+          Content ..... {{from_name}} ({{reply_to}}) wrote on {{sent_at}}:
+                        {{message}}
+          Copy its Template ID                                 → templateOwner
+
+        TEMPLATE 2 — the confirmation that reaches them.
+          To email .... {{to_email}}          ← must be exactly this
+          From name ... Aastha Sahu
+          Reply To .... {{owner_email}}
+          Subject ..... Thanks {{to_name}} — I have your message
+          Content ..... Hi {{to_name}}, thanks for writing. I read everything
+                        myself and reply within 48 hours. Here is what you sent:
+                        {{message}}
+          Copy its Template ID                                 → templateReply
+
+     4. Account → General → Public Key                         → publicKey
+     5. Account → Security → add your domain under Allowed Origins
+        (add http://localhost too if you test locally).
+
+     Available placeholders in both templates: {{from_name}} {{reply_to}}
+     {{to_name}} {{to_email}} {{message}} {{owner_email}} {{site}} {{sent_at}}
+
+     Leave these blank and the form falls back to Web3Forms (if a key is set),
+     then to opening a pre-filled draft in the visitor's mail app.
+     ===================================================================== */
+  emailjs: {
+    publicKey:     "",   // e.g. "aB1cD2eF3gH4iJ5kL"
+    serviceId:     "",   // e.g. "service_ab12cde"
+    templateOwner: "",   // TEMPLATE 1 — the message that reaches you
+    templateReply: ""    // TEMPLATE 2 — the confirmation that reaches them
+  },
   web3formsKey: "",
   loaderText: "Reading the system first…"
 };
@@ -1015,7 +1140,7 @@ window.SERVICES = [
 ];
 /* About page — the big-number achievements strip. value = shown as-is (digits animate). */
 window.NUMBERS = [
-  { value: "1 lakh+", label: "people use products I designed", note: "StepGenie · Sketcho" },
+  { value: "", label: "people use products I designed", note: "StepGenie · Sketcho" },
   { value: "40+", label: "screens shipped on one design system", note: "Makaicare" },
   { value: "1st", label: "Technoxian World Robotics Championship", note: "RC Craft · 2023" },
   { value: "9.36", label: "CGPA, BTech CS (AI & ML)", note: "RCOEM Nagpur · 2026" },
@@ -1096,7 +1221,7 @@ window.PROJECTS = [
     details: { role: "Lead Designer — product UI, brand identity, master prompt design", timeline: "Feb – Jun 2026", client: "Makaicare", platform: "Web", status: "Live · 1 lakh+ users", year: "2026", color: "#b98fb3", tags: ["AI / ML", "Brand", "Product"] },
     featured: true,
     story: {
-      intro: ["Sketcho turns any idea into a whiteboard video. Describe what you want to explain — get a hand-drawn style animated video in minutes. No design skills, no timeline editors, no hassle."],
+      // intro: ["Sketcho turns any idea into a whiteboard video. Describe what you want to explain — get a hand-drawn style animated video in minutes. No design skills, no timeline editors, no hassle.", "I designed its identity and interface in the same file, and owned the master prompt — because in an AI product, what the model is told shapes what the user sees as much as any button."],
       challenge: "The whole promise is 'just type'. Every extra control on the screen breaks that promise, and every unstructured output from the model breaks it worse. Sketcho needed an identity, a product UI and a marketing site at the same time as StepGenie — and it needed the model's output to feel like it belonged to the interface around it.",
       implemented: "One input, one result. I designed the interface around a single text field and the video it produces, then owned the master prompt so the model returns scenes in the structure, tone and length the interface expects. The brand — hand-drawn strokes, a whiteboard white and one accent — came from the product's own output, and it shares tokens with StepGenie so the team moves between both without relearning anything.",
       bullets: ["Positioning and identity for an AI-native product: 'Turn any idea into a whiteboard video. Just type.'", "Product UI built around one input and one output — no timeline editors.", "Master prompt design treated as an interface surface, with the same rigour as UI states.", "Marketing site and social creative on the shared Makaicare design system."],
@@ -1168,10 +1293,10 @@ window.PROJECTS = [
       outcome: { headline: "Two client sites delivered to live launch, review-ready, in a two-month contract.", points: [{ n: "2", label: "sites, research to launch" }, { n: "2", label: "months" }, { n: "0", label: "rounds sent back for missing states" }], note: "" }
     } },
   { slug: "nmims", title: "NMIMS CIS", users: "",
-    image: "assets/img/projects/nmims/hero.jpg", thumbnail: "images/nmims thumbnail.png",
+    image: "assets/img/projects/nmims/hero.jpg", thumbnail: "assets/img/projects/nmims/thumb.jpg",
     gallery: [{ src: "assets/img/projects/nmims/home.jpg", caption: "Homepage", span: "eight" }, { src: "assets/img/projects/nmims/mobile.jpg", caption: "Mobile", span: "four" }],
     audioUrl: "",
-    liveUrl: "https://www.figma.com/proto/j7MmjcR6RVxXI3raoaLcE6/nmims?node-id=1-1746&viewport=386%2C60%2C0.05&t=uMrNQIVdWqrapcCA-1&scaling=min-zoom&content-scaling=fixed&page-id=0%3A1", liveLabel: "NMIMS Website",   /* paste the live URL here → the "View live site" button appears automatically. liveLabel overrides the button text. */
+    liveUrl: "", liveLabel: "",   /* paste the live URL here → the "View live site" button appears automatically. liveLabel overrides the button text. */
     description: "A university centre's official website, rebuilt around how a prospective student actually navigates.",
     details: { role: "Designer — direction, IA, UX, UI, responsive", timeline: "2026 – present", client: "NMIMS Centre for International Studies", platform: "Web · responsive", status: "In progress", year: "2026", color: "#a8433a", tags: ["Web", "Education", "Ongoing"] },
     featured: false,
@@ -1184,10 +1309,10 @@ window.PROJECTS = [
       outcome: { headline: "Ongoing — homepage direction delivered and being extended.", points: [{ n: "2", label: "screens to every answer" }, { n: "1", label: "system for all inner pages" }], note: "" }
     } },
   { slug: "biospectronics", title: "Bio Spectronics", users: "",
-    image: "assets/img/projects/biospectronics/hero.jpg", thumbnail: "images/biospectronic thumbnail.png",
+    image: "assets/img/projects/biospectronics/hero.jpg", thumbnail: "assets/img/projects/biospectronics/thumb.jpg",
     gallery: [{ src: "assets/img/projects/biospectronics/results.jpg", caption: "Results screen · on device", span: "full" }, { src: "assets/img/projects/biospectronics/flow.jpg", caption: "Sample → run → result", span: "six" }, { src: "assets/img/projects/biospectronics/states.jpg", caption: "Error & calibration states", span: "six" }],
     audioUrl: "",
-    liveUrl: "https://www.biospectronics.in/", liveLabel: "Website",   /* paste the live URL here → the "View live site" button appears automatically. liveLabel overrides the button text. */
+    liveUrl: "", liveLabel: "",   /* paste the live URL here → the "View live site" button appears automatically. liveLabel overrides the button text. */
     description: "The operator interface for a Raspberry Pi biochemistry analyzer used by medical professionals.",
     details: { role: "GUI & Web Designer", timeline: "Sep 2023 – Jun 2024", client: "Bio Spectronics — Medical Instrumentation", platform: "Raspberry Pi · fixed display", status: "Shipped · in clinical use", year: "2023–24", color: "#8fb0c8", tags: ["Hardware GUI", "Clinical", "Web"] },
     featured: false,
@@ -1322,14 +1447,14 @@ window.ALSO = [
   <div class="wrap grid">
     <div class="txt reveal">
       <p class="body">Most designers meet the system after the screens are drawn — when engineering says "that's not how the data works." I meet it first. <b>I read what the backend can do, what the model returns, what the business can afford and what the person in front of it is trying to finish</b> — then I make the simplest interface that respects all four.</p>
-      <!-- <p class="body">That habit has taken me from a medical exam-prep app with 1 lakh+ students, to an AI whiteboard tool 1 lakh+ people make videos with, to brand systems carried from the logo to the pitch deck, to the operator GUI of a clinical instrument. I speak engineering, and I execute in Figma.</p> -->
+      <p class="body">That habit has taken me from a medical exam-prep app with 1 lakh+ students, to an AI whiteboard tool 1 lakh+ people make videos with, to brand systems carried from the logo to the pitch deck, to the operator GUI of a clinical instrument. I speak engineering, and I execute in Figma.</p>
       <p class="body">Based in India, working remotely and on-site. Currently freelance and open to the right full-time team.</p>
       <a class="ghost-btn" data-site-link="portfolio" href="#" target="_blank" rel="noopener"><span>See my personal design projects</span><svg viewBox="0 0 16 16" aria-hidden="true"><path d="M5.5 10.5 10.5 5.5M6.5 5.5h4v4"/></svg></a>
     </div>
     <div class="polaroids reveal d2" aria-hidden="true">
-      <div class="pol p1"><div class="media"><img src="images/me.jpg" alt=""><span class="drop">about/photo-1.jpg</span></div><span class="cap"></span></div>
-      <div class="pol p2"><div class="media"><img src="images/mine.png" alt=""><span class="drop">about/photo-2.jpg</span></div><span class="cap"></span></div>
-      <div class="pol p3"><div class="media"><img src="images/profile.jpeg" alt=""><span class="drop">about/photo-3.jpg</span></div><span class="cap"></span></div>
+      <div class="pol p1"><div class="media"><img src="assets/img/about/photo-1.jpg" alt=""><span class="drop">about/photo-1.jpg</span></div><span class="cap">Nagpur · 01</span></div>
+      <div class="pol p2"><div class="media"><img src="assets/img/about/photo-2.jpg" alt=""><span class="drop">about/photo-2.jpg</span></div><span class="cap">Portrait</span></div>
+      <div class="pol p3"><div class="media"><img src="assets/img/about/photo-3.jpg" alt=""><span class="drop">about/photo-3.jpg</span></div><span class="cap">RC Craft · 2023</span></div>
     </div>
   </div>
 </section>
@@ -1457,7 +1582,7 @@ window.ALSO = [
           <p>A photographer-booking product — instant when you need someone today, planned when it's for Saturday. I wanted to know what it's like when nobody hands you the brief: brand, name, voice, 58 screens across five roles, and a waitlist site that's live.</p>
           <a class="btn has-arrow" href="https://cameven-site.vercel.app/" target="_blank" rel="noopener">See the waitlist site <i data-arrow></i></a>
         </div>
-        <div class="media"><img src="images/cameven.png" alt="CAMEVEN screens" loading="lazy"><span class="drop">about/cameven.jpg</span></div>
+        <div class="media"><img src="assets/img/about/cameven.jpg" alt="CAMEVEN screens" loading="lazy"><span class="drop">about/cameven.jpg</span></div>
       </div>
     </div>
     <div class="two" style="padding-bottom:120px">
@@ -1889,7 +2014,7 @@ window.ALSO = [
     const fail = $("#cd-fail"), label = $(".cd-submit-label", btn);
     const setState = (s) => { form.dataset.state = s; btn.disabled = s === "sending"; btn.classList.toggle("is-sending", s === "sending"); label.textContent = s === "sending" ? "Sending…" : "Send it over"; fail.classList.toggle("show", s === "error"); };
     const EJ = S.emailjs || {};
-    const ejSend = (template, params) => fetch("https://api.emailjs.com/api/v1.0/email/send", { method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify({ service_id: EJ.serviceId, template_id: template, user_id: EJ.publicKey, template_params: params }) }).then((r) => { if (!r.ok) throw new Error("emailjs " + r.status); return r; });
+    const ejSend = (template, params) => fetch("https://api.emailjs.com/api/v1.0/email/send", { method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify({ service_id: EJ.serviceId, template_id: template, user_id: EJ.publicKey, template_params: params }), signal: AbortSignal.timeout ? AbortSignal.timeout(15000) : undefined }).then((r) => { if (!r.ok) throw new Error("emailjs " + r.status); return r; });
     async function send(data) {
       const params = { from_name: data.name, reply_to: data.email, to_name: data.name, to_email: data.email, message: data.message, owner_email: S.email, site: location.origin, sent_at: new Date().toLocaleString("en-IN", { timeZone: S.timezone || "Asia/Kolkata" }) };
       if (EJ.publicKey && EJ.serviceId && EJ.templateOwner) {
@@ -2054,6 +2179,31 @@ window.ALSO = [
     document.addEventListener("click", (e) => { const a = e.target.closest('a[href^="#"]'); if (!a) return; const h = a.getAttribute("href"); if (h.startsWith("#/") || h === "#") return; const el = document.getElementById(h.slice(1)); if (el) { e.preventDefault(); el.scrollIntoView({ behavior: reduce ? "instant" : "smooth" }); } });
   });
 })();
+</script>
+
+<!-- ==========================================================================
+     VERCEL WEB ANALYTICS
+     Enable it once in the Vercel dashboard: Project → Analytics → Enable.
+     /_vercel/insights/script.js is served by Vercel itself — there is nothing
+     to install and nothing to configure here. It 404s on localhost; that is
+     expected and harmless.
+     The site routes with the hash (#/work, #/about …), which the script does
+     not count on its own, so each hash change is reported as a page view.
+     ========================================================================== -->
+<script>window.va = window.va || function () { (window.vaq = window.vaq || []).push(arguments); };</script>
+<script defer src="/_vercel/insights/script.js"></script>
+<script>
+  (function () {
+    var seen = "";
+    function view() {
+      var h = location.hash || "#/";
+      if (h === seen) return;
+      seen = h;
+      window.va("pageview", { route: h, path: location.pathname + h });
+    }
+    addEventListener("hashchange", view);
+    view();
+  })();
 </script>
 </body>
 </html>
