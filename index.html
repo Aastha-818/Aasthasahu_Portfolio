@@ -308,6 +308,12 @@ body.menu-open .menu a{transform:none;opacity:1}
 .btn.solid{background:var(--c-ink);color:#fff;border-color:var(--c-ink)}
 .btn.solid:hover{background:#000}
 .btn .carrow{width:30px;height:18px}
+/* outlined link button — used for the personal-portfolio link on About */
+.ghost-btn{display:inline-flex;align-items:center;gap:10px;margin-top:30px;height:48px;padding:0 20px;border-radius:999px;border:1px solid var(--ink-30);color:var(--text-heading);font-size:16px;font-weight:500;white-space:nowrap;transition:border-color .25s ease,background .25s ease,color .25s ease,transform .18s var(--spring)}
+.ghost-btn svg{width:16px;height:16px;fill:none;stroke:currentColor;stroke-width:1.8;stroke-linecap:round;stroke-linejoin:round;transition:transform .3s var(--spring)}
+.ghost-btn:hover{background:var(--text-heading);border-color:var(--text-heading);color:var(--bg-base);transform:translateY(-2px)}
+.ghost-btn:hover svg{transform:translate(2px,-2px)}
+.ghost-btn:active{transform:translateY(0) scale(.97)}
 
 /* ==========================================================================
    SERVICES — sand section, grass, six fanned glass cards (replaces testimonials)
@@ -450,6 +456,19 @@ a.u:hover{border-color:var(--ink)}
 .achv li b{display:block;font-size:19px;font-weight:500;padding-right:70px}
 .achv li span{display:block;margin-top:6px;font-size:14.5px;color:rgba(6,6,6,.7)}
 .achv li .yr{position:absolute;right:18px;top:18px;font-family:var(--mono);font-size:11px;letter-spacing:.1em;color:rgba(6,6,6,.5)}
+/* education — a record list: year, qualification, result. Rules, not cards. */
+.edu-list{display:flex;flex-direction:column;counter-reset:edu}
+.edu-list li{position:relative;display:grid;grid-template-columns:130px minmax(0,1fr) auto;align-items:baseline;gap:28px;padding:26px 8px 26px 0;border-top:1px solid var(--ink-12)}
+.edu-list li:last-child{border-bottom:1px solid var(--ink-12)}
+.edu-list li::after{content:"";position:absolute;left:0;bottom:-1px;height:1px;width:0;background:var(--gold);transition:width .7s var(--ease-out)}
+.edu-list li:hover::after{width:100%}
+.edu-yr{font-family:var(--mono);font-size:12px;letter-spacing:.12em;color:var(--ink-50);white-space:nowrap;padding-top:6px}
+.edu-what h3{font-family:var(--serif);font-weight:400;font-size:clamp(24px,2.4vw,32px);line-height:1.15;letter-spacing:-.01em;color:var(--text-heading)}
+.edu-what p{margin-top:8px;font-size:16px;line-height:1.5;color:var(--ink-70)}
+.edu-score{display:flex;flex-direction:column;align-items:flex-end;text-align:right;white-space:nowrap}
+.edu-score b{font-family:var(--serif);font-weight:400;font-size:clamp(30px,3vw,44px);line-height:1;letter-spacing:-.02em;color:var(--text-heading)}
+.edu-score small{margin-top:8px;font-family:var(--mono);font-size:10.5px;letter-spacing:.12em;text-transform:uppercase;color:var(--ink-50)}
+@media (max-width:700px){.edu-list li{grid-template-columns:minmax(0,1fr) auto;gap:6px 20px;padding:22px 0}.edu-yr{grid-column:1/-1;padding-top:0;order:-1}.edu-score{align-self:center}}
 .interests{display:flex;flex-wrap:wrap;gap:12px}
 .interests li{font-family:var(--serif);font-size:24px;padding:10px 18px;border-radius:999px;background:#fff;color:#111;box-shadow:0 8px 24px rgba(0,0,0,.06);transform:rotate(var(--r,0));transition:transform .45s var(--ease)}
 .interests li:hover{transform:rotate(0) translateY(-3px)}
@@ -538,8 +557,6 @@ a.u:hover{border-color:var(--ink)}
 .cs-live:hover{transform:translateY(-2px);box-shadow:0 10px 26px -10px rgba(6,6,6,.55)}
 .cs-live:hover svg{transform:translate(2px,-2px)}
 .cs-live:active{transform:translateY(0) scale(.97)}
-.cs-live-link{border-bottom:1px solid var(--ink-30);transition:border-color .22s ease}
-.cs-live-link:hover{border-color:var(--text-heading)}
 .cs-full{width:100%;height:clamp(360px,62vh,720px);--slot-bg:#1d1d1d}
 .cs-full .media{height:100%}
 .cs-band{padding:100px 0}
@@ -600,76 +617,92 @@ a.u:hover{border-color:var(--ink)}
    editorial outcome · loader · contact states · footer growth · motion helpers
    ========================================================================== */
 
-/* ---------- services: heading + one line + an animated composition ---------- */
+/* ---------- services: six colour worlds, one motion family ----------
+   Each card carries an accent (--ac) and a light field of the same hue (--ac-soft).
+   The vignette sits in that field, so the six cards read as a set rather than as
+   grey wireframes on milk. Neutrals inside the compositions are warm (--n1/--n2),
+   never cold grey. Loop periods are deliberately mismatched so nothing beats in
+   unison; every loop shares one easing family. ---------- */
 .fan{position:relative;z-index:2;display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:26px;max-width:1380px;margin:64px auto 0;padding:0 var(--pad)}
-.scard{position:relative;display:flex;flex-direction:column;min-height:380px;background:linear-gradient(180deg,rgba(255,255,255,.7),rgba(255,255,255,.34));border:1px solid rgba(255,255,255,.8);backdrop-filter:blur(16px);-webkit-backdrop-filter:blur(16px);border-radius:26px;padding:26px 26px 26px;box-shadow:0 20px 50px rgba(0,0,0,.08);color:var(--c-ink);transition:transform .9s var(--ease),opacity .9s var(--ease),box-shadow .45s var(--ease);overflow:hidden;--ac:#5f7c3a}
-.fan:not(.is-in) .scard{opacity:0}
-.fan:not(.is-in) .scard:nth-child(3n+1){transform:translateX(60%) rotate(-3deg)}
-.fan:not(.is-in) .scard:nth-child(3n){transform:translateX(-60%) rotate(3deg)}
-.fan:not(.is-in) .scard:nth-child(3n+2){transform:translateY(40px)}
-.scard:hover{transform:translateY(-6px);box-shadow:0 30px 60px rgba(0,0,0,.12)}
-.scard[data-viz="brand"]{--ac:#b8541a}.scard[data-viz="ui"]{--ac:var(--c-navy-1)}.scard[data-viz="product"]{--ac:#8a4b7d}.scard[data-viz="code"]{--ac:#2f5d2b}.scard[data-viz="nodes"]{--ac:#a8433a}
-.scard .num{position:absolute;left:26px;top:22px;font-family:var(--mono);font-size:12px;letter-spacing:.14em;color:rgba(6,6,6,.45)}
-.scard h3{font-size:24px;font-weight:500;letter-spacing:-.01em;margin-top:auto;display:flex;align-items:center;gap:10px;transition:transform .5s var(--ease)}
-.scard:hover h3{transform:translateX(4px)}
-.scard h3 .carrow{width:30px;height:19px;opacity:.55;transition:opacity .45s,transform .5s var(--ease)}
+.scard{--ac:#7a5a2e;--ac-soft:#f6eddc;--n1:rgba(74,54,38,.10);--n2:rgba(74,54,38,.17);--vz-e:cubic-bezier(.65,0,.35,1);position:relative;display:flex;flex-direction:column;min-height:380px;background:linear-gradient(180deg,rgba(255,255,255,.86),rgba(255,255,255,.58));border:1px solid rgba(255,255,255,.9);backdrop-filter:blur(16px);-webkit-backdrop-filter:blur(16px);border-radius:26px;padding:26px;box-shadow:0 18px 44px rgba(74,54,38,.10);color:var(--c-ink);overflow:hidden;transition:transform .85s var(--ease),opacity .85s var(--ease),box-shadow .45s var(--ease),border-color .45s var(--ease)}
+/* a thin ribbon of the card's own hue along the top edge */
+.scard::before{content:"";position:absolute;left:0;right:0;top:0;height:3px;background:var(--ac);transform:scaleX(.16);transform-origin:left;transition:transform .7s var(--ease-out)}
+.scard:hover::before{transform:scaleX(1)}
+/* entrance: a staggered rise, not a fan swing. Hover zeroes the delay so the lift is instant. */
+.fan:not(.is-in) .scard{opacity:0;transform:translateY(38px) scale(.975)}
+.scard:nth-child(2){transition-delay:.07s}.scard:nth-child(3){transition-delay:.14s}.scard:nth-child(4){transition-delay:.05s}.scard:nth-child(5){transition-delay:.12s}.scard:nth-child(6){transition-delay:.19s}
+.scard:hover{transition-delay:0s;transform:translateY(-6px);border-color:var(--ac);box-shadow:0 34px 64px rgba(74,54,38,.20)}
+/* the six accents — warm, distinct, all at home on cream */
+.scard[data-viz="ui"]{--ac:#24406b;--ac-soft:#e4eaf6;--n1:rgba(36,64,107,.13);--n2:rgba(36,64,107,.22)}
+.scard[data-viz="product"]{--ac:#7c3d6b;--ac-soft:#f5e6f1;--n1:rgba(124,61,107,.13);--n2:rgba(124,61,107,.22)}
+.scard[data-viz="code"]{--ac:#2d5c39;--ac-soft:#e3efe4;--n1:rgba(45,92,57,.15);--n2:rgba(45,92,57,.25)}
+.scard[data-viz="brand"]{--ac:#c2552a;--ac-soft:#fbe5d8;--n1:rgba(194,85,42,.14);--n2:rgba(194,85,42,.23)}
+.scard[data-viz="system"]{--ac:#8a6410;--ac-soft:#f4ecd8;--n1:rgba(138,100,16,.15);--n2:rgba(138,100,16,.25)}
+.scard[data-viz="nodes"]{--ac:#9d3a30;--ac-soft:#f8e2dd;--n1:rgba(157,58,48,.13);--n2:rgba(157,58,48,.22)}
+.scard .num{position:absolute;left:26px;top:24px;font-family:var(--mono);font-size:12px;letter-spacing:.14em;color:var(--ac);opacity:.55;transition:opacity .4s ease}
+.scard:hover .num{opacity:1}
+.scard h3{font-size:24px;font-weight:500;letter-spacing:-.01em;margin-top:auto;display:flex;align-items:center;gap:10px;transition:transform .5s var(--ease),color .4s ease}
+.scard:hover h3{transform:translateX(4px);color:var(--ac)}
+.scard h3 .carrow{width:30px;height:19px;opacity:.5;transition:opacity .45s,transform .5s var(--ease)}
 .scard:hover h3 .carrow{opacity:1;transform:translateX(6px)}
-.scard p{font-size:15px;line-height:1.5;color:rgba(6,6,6,.68);margin-top:8px;max-width:30ch}
-.scard .vz{position:relative;height:170px;margin:22px 0 18px;border-radius:16px;background:rgba(255,255,255,.35);overflow:hidden;color:var(--ac)}
+.scard p{font-size:15px;line-height:1.5;color:rgba(50,36,24,.72);margin-top:8px;max-width:30ch}
+.scard .vz{position:relative;height:170px;margin:22px 0 18px;border-radius:16px;background:var(--ac-soft);overflow:hidden;color:var(--ac);box-shadow:inset 0 0 0 1px rgba(74,54,38,.07);transition:transform .6s var(--ease),box-shadow .6s var(--ease)}
+.scard:hover .vz{transform:scale(1.025);box-shadow:inset 0 0 0 1px rgba(74,54,38,.16)}
 .scard .vz *{animation-play-state:paused}
 .fan.is-in .scard .vz *{animation-play-state:running}
-/* UI — moving interface elements */
-.vz-ui .win{position:absolute;left:50%;top:50%;width:150px;height:118px;transform:translate(-50%,-50%);background:#fff;border-radius:12px;box-shadow:0 10px 30px rgba(0,0,0,.1);overflow:hidden}
-.vz-ui .bar{position:absolute;left:0;right:0;top:0;height:14px;background:rgba(6,6,6,.06)}
-.vz-ui .tog{position:absolute;left:14px;top:26px;width:34px;height:18px;border-radius:999px;background:rgba(6,6,6,.15);transition:background .3s}
-.vz-ui .tog b{position:absolute;left:2px;top:2px;width:14px;height:14px;border-radius:50%;background:#fff;animation:vz-tog 3.2s ease-in-out infinite}
-.vz-ui .prog{position:absolute;left:58px;right:14px;top:32px;height:6px;border-radius:999px;background:rgba(6,6,6,.08);overflow:hidden}
-.vz-ui .prog b{display:block;height:100%;width:100%;background:var(--ac);transform-origin:left;animation:vz-prog 3.2s ease-in-out infinite}
+/* UI — an interface operating itself */
+.vz-ui .win{position:absolute;left:50%;top:50%;width:150px;height:118px;transform:translate(-50%,-50%);background:#fff;border-radius:12px;box-shadow:0 12px 26px rgba(36,64,107,.18);overflow:hidden}
+.vz-ui .bar{position:absolute;left:0;right:0;top:0;height:14px;background:var(--n1)}
+.vz-ui .tog{position:absolute;left:14px;top:26px;width:34px;height:18px;border-radius:999px;background:var(--n2);transition:background .3s}
+.vz-ui .tog b{position:absolute;left:2px;top:2px;width:14px;height:14px;border-radius:50%;background:#fff;box-shadow:0 1px 2px rgba(74,54,38,.3);animation:vz-tog 4.6s var(--vz-e) infinite}
+.vz-ui .prog{position:absolute;left:58px;right:14px;top:32px;height:6px;border-radius:999px;background:var(--n1);overflow:hidden}
+.vz-ui .prog b{display:block;height:100%;width:100%;background:var(--ac);transform-origin:left;animation:vz-prog 4.6s var(--vz-e) infinite}
 .vz-ui .rows{position:absolute;left:14px;right:14px;top:56px;display:flex;flex-direction:column;gap:8px}
-.vz-ui .rows li{height:12px;border-radius:4px;background:rgba(6,6,6,.08);transform:translateX(-120%);animation:vz-row 3.2s var(--ease-out) infinite}
-.vz-ui .rows li:nth-child(2){animation-delay:.12s;width:80%}.vz-ui .rows li:nth-child(3){animation-delay:.24s;width:60%}
-.vz-ui .cur{position:absolute;width:10px;height:10px;border-radius:50%;background:var(--c-ink);left:20px;top:30px;animation:vz-cur 3.2s ease-in-out infinite}
-@keyframes vz-tog{0%,30%{transform:none}45%,100%{transform:translateX(16px)}}
-@keyframes vz-prog{0%,40%{transform:scaleX(.15)}75%,100%{transform:scaleX(1)}}
-@keyframes vz-row{0%,15%{transform:translateX(-120%)}40%,100%{transform:none}}
-@keyframes vz-cur{0%{transform:translate(0,0)}35%{transform:translate(4px,2px) scale(.8)}45%{transform:translate(4px,2px)}70%{transform:translate(84px,10px)}100%{transform:translate(0,0)}}
-/* Brand — shape transformation */
-.vz-brand .mo{position:absolute;left:50%;top:50%;width:72px;height:72px;margin:-36px 0 0 -36px;background:var(--ac);animation:vz-morph 5s var(--ease) infinite}
-.vz-brand .mo.b{background:var(--c-gold);mix-blend-mode:multiply;animation-delay:-1.6s;transform-origin:60% 40%}
-.vz-brand .mo.c{background:transparent;border:2px solid var(--c-ink);animation-delay:-3.2s;opacity:.6}
+.vz-ui .rows li{height:12px;border-radius:4px;background:var(--n1);transform:translateX(-120%);animation:vz-row 4.6s var(--ease-out) infinite}
+.vz-ui .rows li:first-child{background:var(--ac);opacity:.28}
+.vz-ui .rows li:nth-child(2){animation-delay:.14s;width:80%}.vz-ui .rows li:nth-child(3){animation-delay:.28s;width:60%}
+.vz-ui .cur{position:absolute;width:10px;height:10px;border-radius:50%;background:var(--ac);left:20px;top:30px;animation:vz-cur 4.6s var(--vz-e) infinite}
+@keyframes vz-tog{0%,26%{transform:none}42%,100%{transform:translateX(16px)}}
+@keyframes vz-prog{0%,34%{transform:scaleX(.15)}72%,100%{transform:scaleX(1)}}
+@keyframes vz-row{0%,14%{transform:translateX(-120%)}38%,100%{transform:none}}
+@keyframes vz-cur{0%{transform:translate(0,0)}32%{transform:translate(4px,2px) scale(.78)}42%{transform:translate(4px,2px)}68%{transform:translate(84px,10px)}100%{transform:translate(0,0)}}
+/* Brand — one mark finding its form */
+.vz-brand .mo{position:absolute;left:50%;top:50%;width:72px;height:72px;margin:-36px 0 0 -36px;background:var(--ac);animation:vz-morph 6.4s var(--ease) infinite}
+.vz-brand .mo.b{background:var(--c-gold);mix-blend-mode:multiply;animation-delay:-2.1s;transform-origin:60% 40%}
+.vz-brand .mo.c{background:transparent;border:2px solid var(--c-ink);animation-delay:-4.2s;opacity:.5}
 @keyframes vz-morph{0%{border-radius:50%;transform:rotate(0) scale(1)}25%{border-radius:18% 18% 50% 50%;transform:rotate(45deg) scale(1.05)}50%{border-radius:60% 40% 30% 70%/60% 30% 70% 40%;transform:rotate(90deg) scale(.95)}75%{border-radius:12px;transform:rotate(135deg) scale(1)}100%{border-radius:50%;transform:rotate(180deg) scale(1)}}
-/* Product — floating components */
-.vz-product .fc{position:absolute;background:#fff;border-radius:10px;box-shadow:0 12px 28px rgba(0,0,0,.12);padding:10px;display:flex;flex-direction:column;gap:6px;animation:vz-float 4.4s ease-in-out infinite}
-.vz-product .fc i{display:block;height:8px;border-radius:4px;background:rgba(6,6,6,.1)}
-.vz-product .fc i.img{height:34px;background:var(--ac);opacity:.75}
-.vz-product .c1{left:14%;top:22%;width:88px;height:44px}.vz-product .c2{left:44%;top:12%;width:98px;height:74px;animation-delay:-1.5s;z-index:2}.vz-product .c3{left:26%;top:58%;width:110px;height:50px;animation-delay:-3s}
+/* Product — components breathing in place */
+.vz-product .fc{position:absolute;background:#fff;border-radius:10px;box-shadow:0 12px 26px rgba(124,61,107,.18);padding:10px;display:flex;flex-direction:column;gap:6px;animation:vz-float 5.4s ease-in-out infinite}
+.vz-product .fc i{display:block;height:8px;border-radius:4px;background:var(--n1)}
+.vz-product .fc i.img{height:34px;background:var(--ac);opacity:.85}
+.vz-product .c1{left:14%;top:22%;width:88px;height:44px}.vz-product .c2{left:44%;top:12%;width:98px;height:74px;animation-delay:-1.9s;z-index:2}.vz-product .c3{left:26%;top:58%;width:110px;height:50px;animation-delay:-3.7s}
 .vz-product .c3 i:nth-child(2){width:70%}.vz-product .c1 i:nth-child(2){width:55%}
-.vz-product .pill{position:absolute;right:16px;bottom:16px;width:36px;height:14px;border-radius:999px;background:var(--c-gold);animation:vz-float 3.6s ease-in-out infinite reverse}
+.vz-product .pill{position:absolute;right:16px;bottom:16px;width:36px;height:14px;border-radius:999px;background:var(--c-gold);animation:vz-float 4.6s ease-in-out infinite reverse}
 @keyframes vz-float{0%,100%{transform:translateY(0) rotate(-1deg)}50%{transform:translateY(-9px) rotate(1deg)}}
-/* Code — structure typing itself */
+/* Code — structure writing itself */
 .vz-code{padding:22px 20px}
-.vz-code .ln{height:9px;border-radius:4px;background:rgba(6,6,6,.12);margin:0 0 11px;width:var(--w);transform-origin:left;animation:vz-type 4.2s var(--ease-out) infinite;animation-delay:var(--d)}
+.vz-code .ln{height:9px;border-radius:4px;background:var(--n2);margin:0 0 11px;width:var(--w);transform-origin:left;animation:vz-type 5.2s var(--ease-out) infinite;animation-delay:var(--d)}
 .vz-code .ln.in{margin-left:18px}.vz-code .ln.in2{margin-left:36px;background:var(--ac)}
-.vz-code .caret{position:absolute;left:20px;bottom:24px;width:2px;height:14px;background:var(--c-ink);animation:vz-caret 1s steps(2) infinite}
-.vz-code .box{position:absolute;right:16px;top:16px;width:52px;height:52px;border:1.5px solid var(--ac);border-radius:8px;animation:vz-box 4.2s var(--ease) infinite}
-.vz-code .box::after{content:"";position:absolute;inset:10px;border-radius:4px;background:var(--ac);opacity:.35}
+.vz-code .caret{position:absolute;left:20px;bottom:24px;width:2px;height:14px;background:var(--ac);animation:vz-caret 1.05s steps(2) infinite}
+.vz-code .box{position:absolute;right:16px;top:16px;width:52px;height:52px;border:1.5px solid var(--ac);border-radius:8px;animation:vz-box 5.2s var(--ease) infinite}
+.vz-code .box::after{content:"";position:absolute;inset:10px;border-radius:4px;background:var(--ac);opacity:.4}
 @keyframes vz-type{0%{transform:scaleX(0)}18%,80%{transform:scaleX(1)}95%,100%{transform:scaleX(0)}}
 @keyframes vz-caret{to{opacity:0}}
 @keyframes vz-box{0%,15%{transform:scale(.6) rotate(-8deg);opacity:0}35%,80%{transform:none;opacity:1}100%{transform:scale(.6);opacity:0}}
-/* System — tokens assembling */
+/* System — tokens assembling into a set */
 .vz-system{display:grid;grid-template-columns:repeat(3,26px);grid-auto-rows:26px;gap:8px;place-content:center}
-.vz-system i{display:block;border-radius:6px;background:var(--ac);animation:vz-cell 3.6s var(--spring) infinite;animation-delay:calc(var(--i)*.09s)}
+.vz-system i{display:block;border-radius:6px;background:var(--ac);animation:vz-cell 4.4s var(--spring) infinite;animation-delay:calc(var(--i)*.09s)}
 .vz-system i:nth-child(2n){background:var(--c-gold)}.vz-system i:nth-child(5){background:var(--c-ink)}.vz-system i:nth-child(7){background:var(--c-coral)}
-.vz-system .sweep{position:absolute;left:-40%;top:0;bottom:0;width:30%;background:linear-gradient(90deg,transparent,rgba(255,255,255,.55),transparent);animation:vz-sweep 3.6s ease-in-out infinite}
+.vz-system .sweep{position:absolute;left:-40%;top:0;bottom:0;width:30%;background:linear-gradient(90deg,transparent,rgba(255,255,255,.7),transparent);animation:vz-sweep 4.4s ease-in-out infinite}
 @keyframes vz-cell{0%{transform:scale(0) rotate(-20deg)}20%,75%{transform:none}90%,100%{transform:scale(0)}}
 @keyframes vz-sweep{0%,40%{transform:translateX(0)}70%,100%{transform:translateX(500%)}}
-/* Strategy — connected nodes */
+/* Strategy — a position travelling the network */
 .vz-nodes svg{position:absolute;inset:0;width:100%;height:100%}
-.vz-nodes .links path{stroke-dasharray:120;stroke-dashoffset:120;animation:vz-link 4.8s var(--ease-out) infinite}
-.vz-nodes .links path:nth-child(2){animation-delay:.25s}.vz-nodes .links path:nth-child(3){animation-delay:.5s}.vz-nodes .links path:nth-child(4){animation-delay:.75s}.vz-nodes .links path:nth-child(5){animation-delay:1s}
-.vz-nodes .dots circle{transform-box:fill-box;transform-origin:center;animation:vz-dot 4.8s var(--spring) infinite}
-.vz-nodes .dots circle:nth-child(2){animation-delay:.3s}.vz-nodes .dots circle:nth-child(3){animation-delay:.6s}.vz-nodes .dots circle:nth-child(4){animation-delay:.9s}
-.vz-nodes .pulse{fill:var(--c-gold);stroke:var(--c-ink);stroke-width:1;animation:vz-pulse 4.8s ease-in-out infinite}
+.vz-nodes .links path{stroke-dasharray:120;stroke-dashoffset:120;animation:vz-link 5.8s var(--ease-out) infinite}
+.vz-nodes .links path:nth-child(2){animation-delay:.3s}.vz-nodes .links path:nth-child(3){animation-delay:.6s}.vz-nodes .links path:nth-child(4){animation-delay:.9s}.vz-nodes .links path:nth-child(5){animation-delay:1.2s}
+.vz-nodes .dots circle{transform-box:fill-box;transform-origin:center;animation:vz-dot 5.8s var(--spring) infinite}
+.vz-nodes .dots circle:nth-child(2){animation-delay:.36s}.vz-nodes .dots circle:nth-child(3){animation-delay:.72s}.vz-nodes .dots circle:nth-child(4){animation-delay:1.08s}
+.vz-nodes .pulse{fill:var(--c-gold);stroke:var(--c-ink);stroke-width:1;animation:vz-pulse 5.8s ease-in-out infinite}
 @keyframes vz-link{0%{stroke-dashoffset:120}30%,80%{stroke-dashoffset:0}100%{stroke-dashoffset:-120}}
 @keyframes vz-dot{0%{transform:scale(0)}25%,85%{transform:scale(1)}100%{transform:scale(0)}}
 @keyframes vz-pulse{0%,30%{transform:translate(0,0);opacity:0}35%{opacity:1}55%{transform:translate(52px,30px)}75%{transform:translate(12px,58px);opacity:1}85%,100%{transform:translate(-52px,48px);opacity:0}}
@@ -761,7 +794,6 @@ body[data-page="case"] .nav-loc{display:none}
 .cs-audio{display:flex;align-items:center;gap:18px;max-width:1180px;margin:30px auto 0;padding:0 var(--pad);font-family:var(--mono);font-size:12px;letter-spacing:.1em;text-transform:uppercase;color:var(--text-eyebrow)}
 .cs-audio audio{max-width:420px;width:100%}
 .cs-outcome-band{padding:140px 0 150px;position:relative;overflow:hidden}
-.cs-outcome-band::before{content:"";position:absolute;right:-10vw;top:-10vw;width:40vw;height:40vw;border-radius:50%;background:radial-gradient(circle,rgba(255,218,63,.35),rgba(255,218,63,0) 70%);pointer-events:none}
 .cs-outcome{max-width:none;font-family:inherit;font-size:inherit;line-height:inherit;color:inherit}
 .cs-outcome-head{font-family:var(--serif);font-size:clamp(38px,5.2vw,84px);line-height:1;letter-spacing:-.02em;max-width:18ch;color:var(--text-heading)}
 .cs-outcome-rule{display:block;height:2px;width:120px;background:var(--text-heading);margin-top:40px;transform-origin:left;transform:scaleX(0);transition:transform 1s var(--ease-out) .3s}
@@ -806,7 +838,7 @@ body[data-page="case"] .nav-loc{display:none}
 .ld-sun::after{content:"";position:absolute;inset:-30%;border-radius:50%;background:radial-gradient(circle,rgba(255,247,212,.55),rgba(255,247,212,0) 65%);z-index:-1}
 #page-loader.go .ld-sun{opacity:1;transform:translateY(0) scale(1)}
 .ld-wrap{position:relative;z-index:2;text-align:center;width:min(86vw,560px)}
-.ld-name{font-family:var(--serif);font-size:clamp(48px,9vw,112px);line-height:1;letter-spacing:-.02em;color:var(--text-heading);display:flex;justify-content:center;overflow:hidden;padding-bottom:.06em}
+.ld-name{font-family:var(--serif);font-size:clamp(30px,5vw,58px);line-height:1;letter-spacing:-.02em;color:var(--text-heading);display:flex;justify-content:center;overflow:hidden;padding-bottom:.06em}
 .ld-name span{display:inline-block;transform:translateY(110%);transition:transform .9s var(--ease-out);transition-delay:calc(var(--i)*.05s + .15s)}
 #page-loader.go .ld-name span{transform:none}
 .ld-line{height:1px;background:var(--ink-12);margin:28px auto 12px;overflow:hidden}
@@ -935,6 +967,8 @@ window.SITE = {
   calendly: "https://calendly.com/sahuaastha818/30min",
   resume: "https://drive.google.com/file/d/1hfUDQ2eFgtPcTQdrT1VCk4eHQ1LLKXxU/view?usp=sharing",
   cameven: "https://cameven-site.vercel.app/",
+  /* personal design-projects site — paste the URL and the About button appears; leave "" to hide it */
+  portfolio: "https://aasthasahu-protfolio.framer.website/",
   available: true,
   /* Nav avatar: the photo from the CV is embedded below; replace with "assets/img/about/avatar.jpg" (a square crop) for a sharper one. */
   avatar: "data:image/jpeg;base64,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",
@@ -1290,6 +1324,7 @@ window.ALSO = [
       <p class="body">Most designers meet the system after the screens are drawn — when engineering says "that's not how the data works." I meet it first. <b>I read what the backend can do, what the model returns, what the business can afford and what the person in front of it is trying to finish</b> — then I make the simplest interface that respects all four.</p>
       <p class="body">That habit has taken me from a medical exam-prep app with 1 lakh+ students, to an AI whiteboard tool 1 lakh+ people make videos with, to brand systems carried from the logo to the pitch deck, to the operator GUI of a clinical instrument. I speak engineering, and I execute in Figma.</p>
       <p class="body">Based in India, working remotely and on-site. Currently freelance and open to the right full-time team.</p>
+      <a class="ghost-btn" data-site-link="portfolio" href="#" target="_blank" rel="noopener"><span>See my personal design projects</span><svg viewBox="0 0 16 16" aria-hidden="true"><path d="M5.5 10.5 10.5 5.5M6.5 5.5h4v4"/></svg></a>
     </div>
     <div class="polaroids reveal d2" aria-hidden="true">
       <div class="pol p1"><div class="media"><img src="assets/img/about/photo-1.jpg" alt=""><span class="drop">about/photo-1.jpg</span></div><span class="cap">Nagpur · 01</span></div>
@@ -1394,10 +1429,10 @@ window.ALSO = [
   <div class="two">
     <h2 class="h2 reveal">Education</h2>
     <div class="reveal d1">
-      <ul class="achv" style="grid-template-columns:1fr 1fr">
-        <li><span class="yr">2022 – 2026</span><b>BTech CS (AI &amp; ML)</b><span>RCOEM, Nagpur · CGPA 9.36 / 10</span></li>
-        <li><span class="yr">2019 – 2022</span><b>Class XII — CBSE</b><span>St. Xavier's School, Nagpur · 8.0 / 10</span></li>
-      </ul>
+      <ol class="edu-list">
+        <li><span class="edu-yr">2022 &ndash; 2026</span><div class="edu-what"><h3>BTech, Computer Science (AI &amp; ML)</h3><p>Ramdeobaba College of Engineering &amp; Management, Nagpur</p></div><span class="edu-score"><b>9.36</b><small>CGPA / 10</small></span></li>
+        <li><span class="edu-yr">2019 &ndash; 2022</span><div class="edu-what"><h3>Class XII &mdash; CBSE</h3><p>St. Xavier&rsquo;s School, Nagpur</p></div><span class="edu-score"><b>8.0</b><small>GPA / 10</small></span></li>
+      </ol>
     </div>
   </div>
   <div class="two">
@@ -1951,7 +1986,7 @@ window.ALSO = [
     const outcome = typeof oc === "string" ? { headline: oc } : oc;
     main.innerHTML =
       `<header class="cs-hero"><div class="reveal"><p class="cs-cat">${esc(p.category)}${p.users ? ` <span class="cs-users">${esc(p.users)}</span>` : ""}</p><h1 class="cs-title">${esc(p.title)}</h1><p class="cs-sub">${esc(p.description)}</p><div class="cs-intro">${(st.intro || []).map((t) => `<p>${esc(t)}</p>`).join("")}</div>${p.liveUrl ? `<a class="cs-live" href="${esc(p.liveUrl)}" target="_blank" rel="noopener"><span>${esc(p.liveLabel || "View live site")}</span><svg viewBox="0 0 16 16" aria-hidden="true"><path d="M5.5 10.5 10.5 5.5M6.5 5.5h4v4"/></svg></a>` : ""}</div>` +
-      `<dl class="cs-facts reveal d1"><div><dt>Role</dt><dd>${esc(d.role)}</dd></div><div><dt>Timeline</dt><dd>${esc(d.timeline)}</dd></div><div><dt>With</dt><dd>${esc(d.client)}</dd></div><div><dt>Platform</dt><dd>${esc(d.platform)}</dd></div>${d.status ? `<div><dt>Status</dt><dd>${esc(d.status)}</dd></div>` : ""}${p.liveUrl ? `<div><dt>Live</dt><dd><a class="cs-live-link" href="${esc(p.liveUrl)}" target="_blank" rel="noopener">${esc(p.liveHost || p.liveUrl.replace(/^https?:\/\//, "").replace(/\/$/, ""))} \u2197</a></dd></div>` : ""}</dl></header>` +
+      `<dl class="cs-facts reveal d1"><div><dt>Role</dt><dd>${esc(d.role)}</dd></div><div><dt>Timeline</dt><dd>${esc(d.timeline)}</dd></div><div><dt>With</dt><dd>${esc(d.client)}</dd></div><div><dt>Platform</dt><dd>${esc(d.platform)}</dd></div>${d.status ? `<div><dt>Status</dt><dd>${esc(d.status)}</dd></div>` : ""}</dl></header>` +
       `<div class="cs-full">${media(p.image, p.title, "dark")}</div>` +
       (p.audioUrl ? `<div class="cs-audio reveal"><audio controls preload="none" src="${esc(p.audioUrl)}"></audio><span>Walkthrough — ${esc(p.title)}</span></div>` : "") +
       `<section class="cs-band"><div class="grid"><p class="lbl reveal"><span class="n">01</span> The challenge</p><div class="reveal d1"><h2 class="h-inter">What had to be true</h2><div class="body"><p>${esc(st.challenge)}</p></div></div></div></section>` +
@@ -1993,6 +2028,7 @@ window.ALSO = [
     if (slug) $("main[data-project]", app).dataset.project = slug;
     document.body.dataset.page = key; document.title = TITLES[key] || S.name;
     scrollTo(0, 0); navActive(key === "case" ? "work" : key);
+    $$("[data-site-link]", app).forEach((el) => { const u = S[el.dataset.siteLink]; if (u) el.href = u; else el.remove(); });
     hydrateArrows(app); caseStudy(); services(); hydrateArrows(app); tiles(); logos(); story(); about(); bucket(); motion(app);
     hero$(); recorder(); trail(); reveals(app); reveals($("#site-footer"));
     $("#footer") && (function () { const head = $("#ft-head"), foot = $("#footer"); const grow = () => { const r = foot.getBoundingClientRect(); head.style.setProperty("--ft-grow", (reduce ? 1 : easeOut3((Scroll.vh - r.top) / (Scroll.vh * .75))).toFixed(3)); }; Scroll.add(grow); grow(); })();
