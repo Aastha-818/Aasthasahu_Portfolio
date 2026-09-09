@@ -1120,6 +1120,20 @@ window.SITE = {
     templateReply: ""    // TEMPLATE 2 — the confirmation that reaches them
   },
   web3formsKey: "",
+  /* ---------------------------------------------------------------------
+     FORMSUBMIT — the no-setup fallback, already switched on.
+     Needs no account and no key: it posts to formsubmit.co using the address
+     in `email:` above, and you get the enquiry in your inbox. The FIRST
+     submission after deploy makes FormSubmit email you an activation link —
+     click it once and every later submission arrives normally.
+     It cannot send the visitor a confirmation (FormSubmit's auto-reply does
+     not run on AJAX submissions), so the success panel does not promise one
+     until EmailJS above is filled in. Configure EmailJS and it takes over.
+     Set to "" to switch this off. Once activated you can paste the random
+     alias string FormSubmit gives you here instead of leaving it true, which
+     keeps the address out of the page source.
+     --------------------------------------------------------------------- */
+  formsubmit: true,
   loaderText: "Reading the system first…"
 };
 /* "Work done with" — text logos until you have SVGs (put <img> in the marquee instead). */
@@ -1640,7 +1654,7 @@ window.ALSO = [
       <button class="cd-submit" id="cd-submit" type="submit"><span class="cd-submit-label">Send it over</span><svg class="cd-submit-icon" aria-hidden="true"><use href="#sym-mail"/></svg><span class="cd-spinner" aria-hidden="true"></span></button>
       <div class="cd-fail" id="cd-fail" role="alert"><b>That didn't send.</b><p>Something on the network side went wrong — nothing was lost. <button type="button" class="u" id="cd-retry">Try again</button> or <a class="u" id="cd-fail-mail" href="#">email me directly</a>.</p></div>
     </form>
-    <div class="cd-ok" id="cd-ok" role="status"><span class="cd-ok-tick" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="M4 12.5l5 5L20 6.5"/></svg></span><b>Got it. I'll read it properly and write back soon.</b><p>A confirmation is on its way to <span id="cd-ok-mail"></span>. If it's urgent, the email below goes straight to my inbox.</p></div>
+    <div class="cd-ok" id="cd-ok" role="status"><span class="cd-ok-tick" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="M4 12.5l5 5L20 6.5"/></svg></span><b>Got it. I'll read it properly and write back soon.</b><p><span id="cd-ok-confirm" hidden>A confirmation is on its way to <span id="cd-ok-mail"></span>. </span>If it's urgent, the email below goes straight to my inbox.</p></div>
   </div>
   <div class="cd-alt">
     <p class="cd-alt-label">Not a fan of forms?</p>
@@ -2019,22 +2033,50 @@ window.ALSO = [
       const params = { from_name: data.name, reply_to: data.email, to_name: data.name, to_email: data.email, message: data.message, owner_email: S.email, site: location.origin, sent_at: new Date().toLocaleString("en-IN", { timeZone: S.timezone || "Asia/Kolkata" }) };
       if (EJ.publicKey && EJ.serviceId && EJ.templateOwner) {
         await ejSend(EJ.templateOwner, params);                                   // 1. to Aastha
-        if (EJ.templateReply) { try { await ejSend(EJ.templateReply, params); } catch (_) {} } // 2. confirmation to the sender (non-fatal)
-        return true;
+        let confirmed = false;
+        if (EJ.templateReply) { try { await ejSend(EJ.templateReply, params); confirmed = true; } catch (_) {} } // 2. confirmation to the sender (non-fatal)
+        return confirmed;
       }
       if (S.web3formsKey) {
         const r = await fetch("https://api.web3forms.com/submit", { method: "POST", headers: { "Content-Type": "application/json", Accept: "application/json" }, body: JSON.stringify({ access_key: S.web3formsKey, subject: `New message — ${data.name}`, from_name: data.name, replyto: data.email, ...data }) });
-        const j = await r.json(); if (!(r.ok && j.success)) throw new Error("web3forms"); return true;
+        const j = await r.json(); if (!(r.ok && j.success)) throw new Error("web3forms"); return false;
+      }
+      if (S.formsubmit) {
+        const to = typeof S.formsubmit === "string" ? S.formsubmit : S.email;
+        const r = await fetch("https://formsubmit.co/ajax/" + encodeURIComponent(to), {
+          method: "POST",
+          headers: { "Content-Type": "application/json", Accept: "application/json" },
+          body: JSON.stringify({
+            _subject: `New project enquiry from ${data.name}`,
+            _template: "table",
+            _captcha: "false",
+            Name: data.name,
+            Email: data.email,
+            Message: data.message,
+            Sent: params.sent_at,
+            From: params.site
+          }),
+          signal: AbortSignal.timeout ? AbortSignal.timeout(15000) : undefined
+        });
+        const j = await r.json().catch(() => ({}));
+        if (!r.ok || String(j.success) === "false") throw new Error("formsubmit");
+        return false;   /* delivered to the inbox, but the sender gets no copy */
       }
       /* nothing configured yet: open a draft in their mail app */
       location.href = `mailto:${S.email}?subject=${encodeURIComponent("Hello from " + data.name)}&body=${encodeURIComponent(`Hi Aastha,\n\n${data.message}\n\n— ${data.name}\n${data.email}`)}`;
-      return true;
+      return false;
     }
     form.addEventListener("submit", async (e) => {
       e.preventDefault(); if (!fields.map(validate).every(Boolean)) { $(".cd-field.error .cd-input", form)?.focus(); form.classList.remove("shake"); void form.offsetWidth; form.classList.add("shake"); return; }
       if ($(".cd-honey", form).value) return;
       const data = Object.fromEntries(new FormData(form).entries()); setState("sending");
-      try { await send(data); setState("sent"); form.hidden = true; $("#cd-ok-mail").textContent = data.email; ok.classList.add("show"); }
+      try {
+        const confirmed = await send(data);
+        setState("sent"); form.hidden = true;
+        $("#cd-ok-mail").textContent = data.email;
+        $("#cd-ok-confirm").hidden = !confirmed;   /* never promise an email that is not going out */
+        ok.classList.add("show");
+      }
       catch (_) { setState("error"); }
     });
     $("#cd-retry").addEventListener("click", () => { setState("idle"); btn.focus(); });
