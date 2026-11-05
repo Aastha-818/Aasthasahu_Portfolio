@@ -1062,6 +1062,7 @@ body.loading{overflow:hidden}
   .h-line.lead-line{top:31%}
   .h-line.roll-line{top:calc(31% + 1.15em)}
   .recorder{bottom:18%}
+  .h-line.roll-line{overflow-clip-margin:2px}
 
   /* --- story band: 220px of top padding was an empty screen before the first
      sentence. Also stop centring long paragraphs on a narrow column. */
@@ -1140,8 +1141,9 @@ body.loading{overflow:hidden}
    back to the thumbnail or are hidden — see the error handler in the JS) */
 .media .drop{display:none}
 .cs-band:has(.cs-shots):not(:has(.cs-shots figure:not(.is-missing))){display:none}
-.menu-cta{display:inline-flex;align-items:center;justify-content:center;gap:10px;margin-top:28px;height:52px;padding:0 22px;border-radius:999px;background:var(--c-ink);color:#fff;font-size:16px;font-weight:500;transform:none;opacity:1}
-.menu-cta svg{width:18px;height:14px;fill:none;stroke:currentColor;stroke-width:1.6}
+/* NEW FIX 2: `.menu .menu-cta` out-ranks the big serif `.menu a` rule */
+.menu .menu-cta{display:inline-flex;align-items:center;justify-content:center;gap:10px;margin-top:28px;padding:0 22px;height:52px;border-radius:999px;background:var(--c-ink);color:#fff;font-family:var(--sans);font-size:16px;font-weight:500;line-height:1;transform:none;opacity:1}
+.menu .menu-cta svg{width:18px;height:14px;fill:none;stroke:currentColor;stroke-width:1.6}
 </style>
 <script>
 /* ==========================================================================
@@ -1809,10 +1811,10 @@ window.ALSO = [
   }
   document.addEventListener("error", (e) => {
     const img = e.target; if (!img || img.tagName !== "IMG") return;
-    const fb = img.dataset.fallback;                       /* case-study hero → thumbnail */
+    const fb = img.dataset.fallback;
     if (fb && !img.dataset.fellBack) { img.dataset.fellBack = "1"; img.src = fb; return; }
     img.classList.add("missing");
-    const fig = img.closest(".cs-shots figure"); if (fig) fig.classList.add("is-missing");  /* gallery shot not uploaded yet → hide the slot */
+    const fig = img.closest(".cs-shots figure"); if (fig) fig.classList.add("is-missing");
   }, true);
 
   /* ---------- nav ---------- */
