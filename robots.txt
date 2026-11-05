@@ -1,0 +1,12 @@
+User-agent: *
+Allow: /
+
+# AI crawlers — allowed on purpose so the site can be cited by ChatGPT / Perplexity
+User-agent: GPTBot
+Allow: /
+User-agent: OAI-SearchBot
+Allow: /
+User-agent: PerplexityBot
+Allow: /
+
+Sitemap: https://aasthasahu-portfolio.vercel.app/sitemap.xml
