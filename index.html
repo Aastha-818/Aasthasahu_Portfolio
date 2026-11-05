@@ -1285,6 +1285,9 @@ window.BUCKET = [
   { id: "p-trek", cat: "personal", txt: "Trek somewhere completely new", tag: "Above the treeline" },
   { id: "p-train", cat: "personal", txt: "Take a spontaneous train journey", tag: "Get off where it looks good" },
   { id: "w-1lakh", cat: "pro", txt: "Ship a product 1 lakh+ people use", tag: "StepGenie & Sketcho · 2026", done: true },
+  { id: "w-autoforce", cat: "pro", txt: "Design a foreign product from zero — brand identity to the full SaaS", tag: "Auto Force AI · 2026", done: true },
+  { id: "w-foreign", cat: "pro", txt: "Work with international clients on a regular basis", tag: "Ongoing collaboration · overseas clients", done: true },
+  { id: "w-intl-talk", cat: "pro", txt: "Speak at an international event", tag: "International speaker · Nigeria · Nov 2026", done: true },
   { id: "w-1m", cat: "pro", txt: "Design a product used by a million people", tag: "One more zero" },
   { id: "w-hardware", cat: "pro", txt: "Design for a machine, not a screen", tag: "Bio Spectronics · 2024", done: true },
   { id: "w-brand", cat: "pro", txt: "Take a brand from strategy to logo to product, alone", tag: "StepGenie · 2026", done: true },
@@ -1727,8 +1730,8 @@ window.ALSO = [
     <h1 class="h1 reveal d1">Things I want to do before the plane lands.</h1>
     <p class="lead reveal d2">A plain list, on purpose. Some of these are ticked. Most aren't — yet. Tap a line to tick it (it only remembers on your device).</p>
     <div class="bl-tabs reveal d3" id="bl-tabs" role="tablist" aria-label="Category">
-      <button type="button" role="tab" data-cat="personal" aria-selected="true">Personal <span class="c"></span></button>
-      <button type="button" role="tab" data-cat="pro" aria-selected="false">Professional <span class="c"></span></button>
+      <button type="button" role="tab" data-cat="pro" aria-selected="true">Professional <span class="c"></span></button>
+      <button type="button" role="tab" data-cat="personal" aria-selected="false">Personal <span class="c"></span></button>
     </div>
     <p class="bl-summary reveal d3"><b id="bl-big">0 / 0</b><span id="bl-label"></span></p>
   </div>
@@ -2246,7 +2249,7 @@ window.ALSO = [
     const n = { personal: 0, pro: 0 };
     list.innerHTML = B.map((b) => { n[b.cat]++; return `<div class="bl-row" role="checkbox" tabindex="0" data-cat="${b.cat}" data-id="${b.id}"><span class="idx">${String(n[b.cat]).padStart(2, "0")}</span><span class="txt">${b.txt}</span><span class="tag">${b.tag || ""}</span><span class="box"><svg viewBox="0 0 16 16"><path d="M3 8.5l3.5 3.5L13 5"/></svg></span></div>`; }).join("");
     const rows = $$(".bl-row", list); const tabs = $$("#bl-tabs button"); const big = $("#bl-big"), lab = $("#bl-label");
-    let cat = "personal";
+    let cat = "pro";   /* Professional opens by default */
     const count = () => {
       const vis = rows.filter((r) => r.dataset.cat === cat); const d = vis.filter((r) => r.classList.contains("done")).length;
       big.textContent = `${d} / ${vis.length}`; lab.textContent = `${cat === "pro" ? "professional" : "personal"} · ticked off`;
