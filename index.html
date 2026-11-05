@@ -1038,6 +1038,110 @@ body.loading{overflow:hidden}
   .plane-fly,.dot-cursor{display:none!important}
   .logo-marquee-inner{animation:none;flex-wrap:wrap;width:auto;justify-content:center;gap:24px 40px}
 }
+
+/* ==========================================================================
+   MOBILE PASS v7 — phone layout, menu, tiles, case-study images
+   Appended last on purpose so it wins the cascade at equal specificity.
+   ========================================================================== */
+
+/* --- burger menu: the footer links inherited the 40–64px serif `.menu a`
+   rule, so the email overflowed the screen. Scope the big type to the list,
+   top-align the whole thing and give the foot proper small links. */
+.menu{justify-content:flex-start;padding:92px 24px 40px;overflow-y:auto}
+.menu ul{margin:0;padding:0;list-style:none}
+.menu li a{display:flex;align-items:baseline;gap:18px;padding:18px 0;font-family:var(--serif);font-size:clamp(34px,9vw,56px);line-height:1}
+.menu-foot{margin-top:36px;flex-direction:column;gap:0;border-top:0}
+.menu-foot a{display:flex;align-items:center;justify-content:space-between;padding:14px 0;border-bottom:1px solid var(--ink-12);font-family:var(--mono);font-size:12px;letter-spacing:.12em;text-transform:uppercase;color:var(--ink-50);line-height:1.4;transform:none;opacity:1;word-break:break-all}
+.menu-foot a::after{content:"↗";font-family:var(--sans);font-size:14px;letter-spacing:0;flex-shrink:0;margin-left:12px}
+.menu-foot a:first-child{color:var(--text-heading)}
+
+@media (max-width:900px){
+  /* --- hero: pull the headline and the recorder towards each other so the
+     middle of the screen is not a 300px hole on a tall phone */
+  .hero-eyebrow{top:26%}
+  .h-line.lead-line{top:31%}
+  .h-line.roll-line{top:calc(31% + 1.15em)}
+  .recorder{bottom:18%}
+
+  /* --- story band: 220px of top padding was an empty screen before the first
+     sentence. Also stop centring long paragraphs on a narrow column. */
+  .projects{padding:140px 0 90px}
+  .intro-copy{width:auto;text-align:left;font-size:21px;line-height:1.45;max-width:none;padding:0 var(--pad)}
+  .intro-copy p{text-align:left}
+  .featured-heading{text-align:left;padding:0 var(--pad);font-size:13px;font-family:var(--mono);letter-spacing:.14em;text-transform:uppercase;color:var(--ink-50)}
+  .logo-marquee-wrap{width:100%;margin-bottom:48px}
+
+  /* --- project tiles: the hover overlay (title + one-liner) never shows on
+     touch, so every tile was an unlabeled picture. Turn it into a caption. */
+  .project-tile,.project-tile.tile-wide,.project-tile.tile-narrow{height:auto;aspect-ratio:auto;border-radius:0;overflow:visible;display:flex;flex-direction:column;box-shadow:none}
+  .project-tile .media{position:relative;inset:auto;aspect-ratio:5/4;border-radius:22px;overflow:hidden}
+  .tile-overlay{display:flex;position:static;inset:auto;opacity:1;backdrop-filter:none;-webkit-backdrop-filter:none;background:none;align-items:flex-start;text-align:left;padding:14px 4px 0;transition:none}
+  .tile-overlay-title{font-size:24px;line-height:1.15;transform:none}
+  .tile-overlay-subtitle{font-size:14px;line-height:1.45;margin-top:6px;opacity:.7;transform:none;max-width:none}
+  .tile-overlay .carrow{display:none}
+  .work-page .tile-overlay-title,.work-page .tile-overlay-subtitle{color:var(--cream-text)}
+  .tile-tag{left:14px;top:14px;font-size:10px;padding:7px 10px}
+  .tile-users{top:14px;right:14px;bottom:auto;left:auto}
+  .project-tiles{gap:34px}
+  .work-cta{margin-top:44px}
+  .work-cta .btn{width:100%;justify-content:center}
+
+  /* --- services: close the gap between the "Every project" button and the
+     sand band, and give the heading breathing room */
+  .services{padding:70px 0 clamp(170px,40vw,260px)}
+  .services .wave-top{height:48px}
+  .section-head{align-items:flex-start;text-align:left;padding:0 var(--pad)}
+  .section-head .h-inter{font-size:clamp(30px,8.4vw,44px);line-height:1.12}
+  .fan{margin-top:32px;gap:18px}
+  .scard{padding:20px}
+  .scard .vz{height:150px}
+  .scard h3{font-size:20px}
+
+  /* --- footer: tighter on a phone */
+  .ft{min-height:640px}
+  .ft-inner{padding:90px 20px 240px;gap:26px}
+  .ft-sub{font-size:17px}
+
+  /* --- contact drawer: full-screen sheet on a phone, no side shadow */
+  .contact-drawer{width:100%;box-shadow:none}
+  .cd-title{font-size:clamp(34px,10vw,48px)}
+
+  /* --- page heads (work / about / bucket list) — the nav pill sat on top of
+     the eyebrow; push content down a little and tighten the h1 */
+  .page-head{padding:112px 0 24px}
+  .h1.xl{font-size:clamp(36px,10.4vw,60px);line-height:1.05}
+  .h2.xl{font-size:clamp(30px,8.6vw,52px);line-height:1.08}
+
+  /* --- case study: the hero facts should read as a 2-col sheet, and the big
+     outcome headline must never clip while it reveals */
+  .cs-facts{grid-template-columns:1fr 1fr;gap:18px 20px}
+  .cs-full{height:auto;aspect-ratio:4/3}
+  .cs-outcome-head{overflow:visible;line-height:1.15}
+  .cs-outcome-head [data-words] .w,.cs-outcome-head .w{overflow:visible}
+  /* gallery images that have not been uploaded yet are hidden instead of
+     showing a "Drop: …" placeholder to a visitor */
+  .cs-shots figure.is-missing{display:none}
+  .media img.missing + .drop{display:none}
+}
+
+@media (max-width:600px){
+  .h-line{font-size:clamp(38px,13.5vw,60px)}
+  :root{--pad:18px}
+}
+
+@media (max-width:430px){
+  /* Back + pill + buttons must share 390px: keep the pill to the avatar only
+     on sub-pages and slim the right-hand controls */
+  body[data-page="work"] .nav-pill,body[data-page="case"] .nav-pill,body[data-page="about"] .nav-pill,body[data-page="bucket"] .nav-pill{padding:0 4px}
+  .nav-side{font-size:10px}
+}
+
+/* menu CTA + "Drop:" labels are never shown to visitors (missing images fall
+   back to the thumbnail or are hidden — see the error handler in the JS) */
+.media .drop{display:none}
+.cs-band:has(.cs-shots):not(:has(.cs-shots figure:not(.is-missing))){display:none}
+.menu-cta{display:inline-flex;align-items:center;justify-content:center;gap:10px;margin-top:28px;height:52px;padding:0 22px;border-radius:999px;background:var(--c-ink);color:#fff;font-size:16px;font-weight:500;transform:none;opacity:1}
+.menu-cta svg{width:18px;height:14px;fill:none;stroke:currentColor;stroke-width:1.6}
 </style>
 <script>
 /* ==========================================================================
@@ -1703,7 +1807,13 @@ window.ALSO = [
   function hydrateArrows(root = document) {
     $$("[data-arrow]", root).forEach((el) => { const t = document.createElement("template"); t.innerHTML = ARROW; const svg = t.content.firstChild; if (el.className) svg.classList.add(...el.className.split(" ").filter(Boolean)); if (el.getAttribute("style")) svg.setAttribute("style", el.getAttribute("style")); el.replaceWith(svg); });
   }
-  document.addEventListener("error", (e) => { if (e.target.tagName === "IMG") e.target.classList.add("missing"); }, true);
+  document.addEventListener("error", (e) => {
+    const img = e.target; if (!img || img.tagName !== "IMG") return;
+    const fb = img.dataset.fallback;                       /* case-study hero → thumbnail */
+    if (fb && !img.dataset.fellBack) { img.dataset.fellBack = "1"; img.src = fb; return; }
+    img.classList.add("missing");
+    const fig = img.closest(".cs-shots figure"); if (fig) fig.classList.add("is-missing");  /* gallery shot not uploaded yet → hide the slot */
+  }, true);
 
   /* ---------- nav ---------- */
   const NAV = [["Work", "#/work", "work"], ["About", "#/about", "about"], ["Bucket list", "#/bucket-list", "bucket"]];
@@ -1719,7 +1829,7 @@ window.ALSO = [
       `<button class="nav-burger" type="button" aria-label="Open menu" aria-expanded="false"><i></i></button></div>`;
     document.body.prepend(nav); navEl = nav;
     const menu = document.createElement("div"); menu.className = "menu"; menu.id = "menu";
-    menu.innerHTML = `<ul>${[["Home", "#/", "home"], ...NAV, ["Contact", "#/contact", "contact"]].map(([t, h], i) => `<li><a href="${h}"${h === "#/contact" ? " data-contact" : ""}><span class="n">0${i + 1}</span>${t}</a></li>`).join("")}</ul><div class="menu-foot"><a href="mailto:${S.email}">${S.email}</a><a href="${S.linkedin}" target="_blank" rel="noopener">LinkedIn</a><a href="${S.resume}" target="_blank" rel="noopener">Résumé</a></div>`;
+    menu.innerHTML = `<ul>${[["Home", "#/", "home"], ...NAV, ["Contact", "#/contact", "contact"]].map(([t, h], i) => `<li><a href="${h}"${h === "#/contact" ? " data-contact" : ""}><span class="n">0${i + 1}</span>${t}</a></li>`).join("")}</ul><a class="menu-cta" href="#/contact" data-contact><svg aria-hidden="true"><use href="#sym-mail"/></svg>Work with me</a><div class="menu-foot"><a href="mailto:${S.email}">${S.email}</a><a href="${S.linkedin}" target="_blank" rel="noopener">LinkedIn</a><a href="${S.resume}" target="_blank" rel="noopener">Résumé</a></div>`;
     nav.after(menu);
     const av = $(".nav-avatar img", nav); av.addEventListener("load", () => { $(".nav-avatar span", nav).style.display = "none"; });
     if (!S.available) { $(".avail-tag", nav).style.display = "none"; }
@@ -1878,7 +1988,7 @@ window.ALSO = [
   /* ---------- tiles ---------- */
   /* media(): any plain path or URL. A missing file shows a labelled slot instead of a broken image. */
   const esc = (s) => String(s ?? "").replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/"/g, "&quot;");
-  const media = (src, alt, cls) => `<div class="media ${cls || ""}"><img src="${esc(src)}" alt="${esc(alt)}" loading="lazy" decoding="async"><span class="drop">Drop: ${esc((src || "").split("/").slice(-2).join("/"))}</span></div>`;
+  const media = (src, alt, cls, fallback) => `<div class="media ${cls || ""}"><img src="${esc(src)}" alt="${esc(alt)}" loading="lazy" decoding="async"${fallback && fallback !== src ? ` data-fallback="${esc(fallback)}"` : ""}><span class="drop">Drop: ${esc((src || "").split("/").slice(-2).join("/"))}</span></div>`;
   const D = (p) => p.details || {};
   const tileHTML = (p, w) => `<a class="project-tile tile-${w} has-arrow" href="#/work/${p.slug}" style="--tile-bg:${D(p).color || "#cfd7c9"}">${media(p.thumbnail || p.image, p.title)}<span class="tile-tag">${esc(D(p).year || "")} · ${esc(p.category)}</span>${p.users ? `<span class="tile-users">${esc(p.users)}</span>` : ""}<div class="tile-overlay"><p class="tile-overlay-title">${esc(p.title)}</p><p class="tile-overlay-subtitle">${esc(p.description)}</p><i data-arrow></i></div></a>`;
   function renderTiles(container, list) {
@@ -2019,6 +2129,7 @@ window.ALSO = [
     const open = () => { lastFocus = document.activeElement; drawer.classList.add("open"); scrim.classList.add("open"); drawer.setAttribute("aria-hidden", "false"); document.body.classList.add("locked"); setTimeout(() => $("#cd-name").focus(), 400); };
     const shut = () => { drawer.classList.remove("open"); scrim.classList.remove("open"); drawer.setAttribute("aria-hidden", "true"); document.body.classList.remove("locked"); if (location.hash === "#/contact") history.replaceState(null, "", location.pathname + (window.__lastRoute || "#/")); lastFocus && lastFocus.focus && lastFocus.focus(); };
     window.__openContact = open;
+    window.__contactSent = () => { open(); setState("sent"); form.hidden = true; $("#cd-ok-confirm").hidden = true; ok.classList.add("show"); };
     close.addEventListener("click", shut); scrim.addEventListener("click", shut);
     document.addEventListener("keydown", (e) => { if (e.key === "Escape" && drawer.classList.contains("open")) shut(); });
     document.addEventListener("click", (e) => { const a = e.target.closest("[data-contact]"); if (a) { e.preventDefault(); open(); } });
@@ -2044,24 +2155,28 @@ window.ALSO = [
       }
       if (S.formsubmit) {
         const to = typeof S.formsubmit === "string" ? S.formsubmit : S.email;
-        const r = await fetch("https://formsubmit.co/ajax/" + encodeURIComponent(to), {
-          method: "POST",
-          headers: { "Content-Type": "application/json", Accept: "application/json" },
-          body: JSON.stringify({
-            _subject: `New project enquiry from ${data.name}`,
-            _template: "table",
-            _captcha: "false",
-            Name: data.name,
-            Email: data.email,
-            Message: data.message,
-            Sent: params.sent_at,
-            From: params.site
-          }),
-          signal: AbortSignal.timeout ? AbortSignal.timeout(15000) : undefined
-        });
-        const j = await r.json().catch(() => ({}));
-        if (!r.ok || String(j.success) === "false") throw new Error("formsubmit");
-        return false;   /* delivered to the inbox, but the sender gets no copy */
+        const payload = { _subject: `New project enquiry from ${data.name}`, _template: "table", _captcha: "false", Name: data.name, Email: data.email, Message: data.message, Sent: params.sent_at, From: params.site };
+        try {
+          const r = await fetch("https://formsubmit.co/ajax/" + encodeURIComponent(to), {
+            method: "POST",
+            headers: { "Content-Type": "application/json", Accept: "application/json" },
+            body: JSON.stringify(payload),
+            signal: AbortSignal.timeout ? AbortSignal.timeout(15000) : undefined
+          });
+          const j = await r.json().catch(() => ({}));
+          if (r.ok && String(j.success) !== "false") return false;   /* delivered to the inbox, but the sender gets no copy */
+          if (r.ok) throw new Error("formsubmit: " + (j.message || "rejected"));
+          /* 4xx/5xx (Cloudflare bot-check answers 503 to fetch) → fall through to the real POST below */
+        } catch (err) { if (err && /^formsubmit:/.test(err.message)) throw err; }
+        /* FormSubmit refused the AJAX call, so hand it a plain HTML form submission instead —
+           a normal navigation always passes. FormSubmit sends the mail and redirects back to _next,
+           and render() reads ?sent=1 to show the success panel. */
+        const f = document.createElement("form"); f.method = "POST"; f.action = "https://formsubmit.co/" + encodeURIComponent(to); f.style.display = "none";
+        const add = (k, v) => { const i = document.createElement("input"); i.type = "hidden"; i.name = k; i.value = v; f.appendChild(i); };
+        Object.entries(payload).forEach(([k, v]) => add(k, v));
+        add("_next", location.origin + location.pathname + "#/contact?sent=1");
+        document.body.appendChild(f); f.submit();
+        return new Promise(() => {});   /* the page is navigating away */
       }
       /* nothing configured yet: open a draft in their mail app */
       location.href = `mailto:${S.email}?subject=${encodeURIComponent("Hello from " + data.name)}&body=${encodeURIComponent(`Hi Aastha,\n\n${data.message}\n\n— ${data.name}\n${data.email}`)}`;
@@ -2155,7 +2270,7 @@ window.ALSO = [
     main.innerHTML =
       `<header class="cs-hero"><div class="reveal"><p class="cs-cat">${esc(p.category)}${p.users ? ` <span class="cs-users">${esc(p.users)}</span>` : ""}</p><h1 class="cs-title">${esc(p.title)}</h1><p class="cs-sub">${esc(p.description)}</p><div class="cs-intro">${(st.intro || []).map((t) => `<p>${esc(t)}</p>`).join("")}</div>${p.liveUrl ? `<a class="cs-live" href="${esc(p.liveUrl)}" target="_blank" rel="noopener"><span>${esc(p.liveLabel || "View live site")}</span><svg viewBox="0 0 16 16" aria-hidden="true"><path d="M5.5 10.5 10.5 5.5M6.5 5.5h4v4"/></svg></a>` : ""}</div>` +
       `<dl class="cs-facts reveal d1"><div><dt>Role</dt><dd>${esc(d.role)}</dd></div><div><dt>Timeline</dt><dd>${esc(d.timeline)}</dd></div><div><dt>With</dt><dd>${esc(d.client)}</dd></div><div><dt>Platform</dt><dd>${esc(d.platform)}</dd></div>${d.status ? `<div><dt>Status</dt><dd>${esc(d.status)}</dd></div>` : ""}</dl></header>` +
-      `<div class="cs-full">${media(p.image, p.title, "dark")}</div>` +
+      `<div class="cs-full">${media(p.image, p.title, "dark", p.thumbnail)}</div>` +
       (p.audioUrl ? `<div class="cs-audio reveal"><audio controls preload="none" src="${esc(p.audioUrl)}"></audio><span>Walkthrough — ${esc(p.title)}</span></div>` : "") +
       `<section class="cs-band"><div class="grid"><p class="lbl reveal"><span class="n">01</span> The challenge</p><div class="reveal d1"><h2 class="h-inter">What had to be true</h2><div class="body"><p>${esc(st.challenge)}</p></div></div></div></section>` +
       `<section class="cs-band dark"><div class="grid"><p class="lbl reveal"><span class="n">02</span> What I implemented</p><div class="reveal d1"><h2 class="h-inter">What I designed</h2><div class="body"><p>${esc(st.implemented)}</p><ul class="cs-list">${(st.bullets || []).map((b) => `<li>${esc(b)}</li>`).join("")}</ul></div></div></div></section>` +
@@ -2205,7 +2320,7 @@ window.ALSO = [
   function hero$() { hero(); }
   function render() {
     const r = parse();
-    if (r.key === "contact") { if (!app.childElementCount) mount({ key: "home" }); window.__openContact && window.__openContact(); return; }
+    if (r.key === "contact") { if (!app.childElementCount) mount({ key: "home" }); if (/[?&]sent=1/.test(location.hash) && window.__contactSent) { history.replaceState(null, "", location.pathname + "#/contact"); window.__contactSent(); } else window.__openContact && window.__openContact(); return; }
     window.__lastRoute = "#" + r.path;
     const same = current === r.key + (r.slug || "");
     if (same) return;
